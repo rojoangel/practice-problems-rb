@@ -2,10 +2,6 @@
 
 require_relative './section-8-provided'
 
-class ExtendedGuessTheWordGame < GuessTheWordGame
-  ## YOUR CODE HERE
-end
-
 class ExtendedSecretWord < SecretWord
   attr_accessor :word, :pattern
 
@@ -14,8 +10,12 @@ class ExtendedSecretWord < SecretWord
     self.pattern = initial_pattern word
   end
 
+  def alpha? ch
+    ch.match(/^[[:alpha:]]$/)
+  end
+
   def initial_pattern word
-    (word.chars.map {|ch| if ch.match(/^[[:alpha:]]$/) then '-' else ch end}).join
+    (word.chars.map {|ch| if alpha? ch then '-' else ch end}).join
   end
 
   def guess_letter! letter
@@ -29,11 +29,15 @@ class ExtendedSecretWord < SecretWord
     end
     found
   end
+
+  def valid_guess? guess
+    guess.length == 1 and alpha? guess and !self.pattern.downcase.index guess.downcase
+  end
 end
 
 ## Change to `false` to run the original game
 if true
-  ExtendedGuessTheWordGame.new(ExtendedSecretWord).play
+  GuessTheWordGame.new(ExtendedSecretWord).play
 else
   GuessTheWordGame.new(SecretWord).play
 end
