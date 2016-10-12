@@ -17,6 +17,18 @@ class ExtendedSecretWord < SecretWord
   def initial_pattern word
     (word.chars.map {|ch| if ch.match(/^[[:alpha:]]$/) then '-' else ch end}).join
   end
+
+  def guess_letter! letter
+    found = self.word.downcase.index letter.downcase
+    if found
+      start = 0
+      while ix = self.word.downcase.index(letter.downcase, start)
+        self.pattern[ix] = self.word[ix]
+        start = ix + 1
+      end
+    end
+    found
+  end
 end
 
 ## Change to `false` to run the original game
